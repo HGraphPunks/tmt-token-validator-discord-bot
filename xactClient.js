@@ -22,7 +22,6 @@ module.exports = async (message, bot) => {
   /* Generate a QR Code */
   const qrCode = await client.generateQRCode();
 
-  
   /* Subscribe to new Connections */
   client.connect().subscribe(user => {
         // Check to see if user is a punk holder
@@ -37,28 +36,23 @@ module.exports = async (message, bot) => {
         hgpHolder.lazySuperPunk = tokenIds.some(r => hgpTokenIds.lazySuperPunk.includes(r))
         hgpHolder.classicPunk = tokenIds.some(r => hgpTokenIds.classicPunk.includes(r))
         
-        if (hgpHolder.glitchPunk) {
-          var role = message.guild.roles.cache.find(role => role.name === "Glitch Punk Holder");
-message.member.roles.add(role);
-        }
-        if (hgpHolder.coinEyesPunk) {
-          var role1 = message.guild.roles.cache.find(role => role.name === "Coin Eyes Holder");
-message.member.roles.add(role1);
-        }
-        if (hgpHolder.lazySuperPunk) {
-          var role2 = message.guild.roles.cache.find(role => role.name === "Lazy Super Punk Holder");
-message.member.roles.add(role2);
-        }
-        if (hgpHolder.classicPunk) {
-          var role3 = message.guild.roles.cache.find(role => role.name === "HGP Holder");
-message.member.roles.add(role3);
-        }
+        var role = message.guild.roles.cache.find(role => role.name === "Glitch Punk Holder");
+        hgpHolder.glitchPunk ? message.member.roles.add(role) : message.member.roles.remove(role);
+
+        var role1 = message.guild.roles.cache.find(role => role.name === "Coin Eyes Holder");
+        hgpHolder.coinEyesPunk ? message.member.roles.add(role1) : message.member.roles.remove(role1);
+
+        var role2 = message.guild.roles.cache.find(role => role.name === "Lazy Super Punk Holder");
+        hgpHolder.lazySuperPunk ? message.member.roles.add(role2) : message.member.roles.remove(role2);
+        
+        var role3 = message.guild.roles.cache.find(role => role.name === "HGP Holder");
+        hgpHolder.classicPunk ? message.member.roles.add(role3) : message.member.roles.remove(role3);
 
         let embed =  new MessageEmbed()
             .setTitle(`Holder Roles for: ${message.member ? message.member.displayName : message.author.username}`)
             .setColor('GREEN')
 	          .setTimestamp()
-	          .setDescription(`Below are the holder roles and a redaout of which you have unlocked!`)
+	          .setDescription(`Below are the holder roles and a readout of which you have unlocked!`)
             .setFooter(`Requested by: ${message.member ? message.member.displayName : message.author.username}`, message.author.displayAvatarURL())
             .setThumbnail(bot.user.displayAvatarURL())
             .addFields(
