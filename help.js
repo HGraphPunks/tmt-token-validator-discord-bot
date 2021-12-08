@@ -3,13 +3,8 @@ module.exports = {
     description: 'Shows the list of commands or help on specified command.',
     format: 'help [command-name]'
   },
-  'ping': {
-    description: 'Checks connectivity with discord\'s servers.',
-    format: 'ping'
-  },
-  'say': {
-    aliases: ['repeat'],
-    description: 'Repeats whatever is said.',
-    format: 'say <message>'
+  'validate': {
+    description: 'Gives you an ability to scan a QR code with your wallet to verify you are a holder of certain tokens for this server',
+    format: '_validate'
   }
 }

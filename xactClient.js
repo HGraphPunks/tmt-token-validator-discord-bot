@@ -5,6 +5,8 @@ const axios = require('axios');
 const hgpHolder = require('./hgpHolder');
 const hgpTokenIds = require('./hgpTokenIds');
 const fs = require("fs");
+const setUserWithRole = require("./db/setUserWithRole");
+const deleteUser = require("./db/deleteUser");
 
 module.exports = async (message, bot) => {
   //get your api key from your .env file
@@ -24,7 +26,7 @@ module.exports = async (message, bot) => {
 
   /* Subscribe to new Connections */
   client.connect().subscribe(user => {
-        // Check to see if user is a punk holder
+    // Check to see if user is a punk holder
     axios
     .get('https://mainnet-public.mirrornode.hedera.com/api/v1/tokens?account.id=' + user.accountId)
     .then((response) => {
@@ -56,12 +58,16 @@ module.exports = async (message, bot) => {
             .setFooter(`Requested by: ${message.member ? message.member.displayName : message.author.username}`, message.author.displayAvatarURL())
             .setThumbnail(bot.user.displayAvatarURL())
             .addFields(
-              { name: 'Glitch Punk Holder', value: hgpHolder.glitchPunk },
-              { name: 'Coin Eyes Holder', value: hgpHolder.coinEyesPunk },
-              { name: 'Lazy Super Punk Holder', value: hgpHolder.lazySuperPunk },
-              { name: 'HGP Holder', value: hgpHolder.classicPunk },
+              { name: 'Glitch Punk Holder', value: hgpHolder.glitchPunk, inline: true },
+              { name: 'Coin Eyes Holder', value: hgpHolder.coinEyesPunk, inline: true },
+              { name: 'Lazy Super Punk Holder', value: hgpHolder.lazySuperPunk, inline: true },
+              { name: 'HGP Holder', value: hgpHolder.classicPunk, inline: true },
             )
-        message.channel.send(embed);
+        message.author.send(embed);
+        console.log(message)
+        if (hgpHolder.glitchPunk || hgpHolder.coinEyesPunk || hgpHolder.lazySuperPunk || hgpHolder.classicPunk) {
+          setUserWithRole(user, hgpHolder, message.id, message.channel.id, message.author)
+        }
     })
     .catch((error) => {
         console.log(error);

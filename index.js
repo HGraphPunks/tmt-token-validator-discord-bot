@@ -1,8 +1,10 @@
 const { Client, MessageEmbed } = require('discord.js');
+const cron = require('node-cron');
 const generateLogin = require('./xactClient')
 const config = require('./config');
 const commands = require('./help');
 const fs = require("fs");
+const userCron = require("./cron");
 
 let bot = new Client({
   fetchAllMembers: true, // Remove this if the bot is in large guilds.
@@ -15,6 +17,8 @@ let bot = new Client({
   }
 });
 
+userCron.start(bot)
+
 bot.on('ready', () => console.log(`Logged in as ${bot.user.tag}.`));
 
 bot.on('message', async message => {
@@ -26,16 +30,15 @@ bot.on('message', async message => {
     switch (command) {
 
       case 'validate':
-        let msg = await message.reply('Generating QR Code...');
+        let msg = await message.author.send('Generating QR Code...');
         const qrCode = await generateLogin(message, bot);
         
         let base64Image = qrCode.split(';base64,').pop();
         
         fs.writeFile('./qrcodes/login_.jpg', base64Image, {encoding: 'base64'}, (err) => {
             console.log('File created');
-            message.reply("Scan with Xact Wallet.", { files: ["./qrcodes/login_.jpg"] });
+            message.author.send("Scan with Xact Wallet.", { files: ["./qrcodes/login_.jpg"] });
         });
-        //await msg.edit(`PONG! Message round-trip took ${Date.now() - msg.createdTimestamp}ms.`)
         break;
 
       /* Unless you know what you're doing, don't change this command. */
