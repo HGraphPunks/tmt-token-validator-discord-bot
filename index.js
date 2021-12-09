@@ -11,7 +11,7 @@ let bot = new Client({
   presence: {
     status: 'online',
     activity: {
-      name: `${config.prefix}help`,
+      name: `${config.prefix}validate`,
       type: 'LISTENING'
     }
   }
@@ -22,6 +22,7 @@ userCron.start(bot)
 bot.on('ready', () => console.log(`Logged in as ${bot.user.tag}.`));
 
 bot.on('message', async message => {
+ 
   // Check for command
   if (message.content.startsWith(config.prefix)) {
     let args = message.content.slice(config.prefix.length).split(' ');
@@ -30,14 +31,23 @@ bot.on('message', async message => {
     switch (command) {
 
       case 'validate':
-        let msg = await message.author.send('Generating QR Code...');
+        // Only allow #bouncer bot channel
+        if (message.channel.id !== '918265350276128768') {
+          message.author.send("Bzzzzz* Error: Please use #🤖┃bouncer-bot to post _validate the Punks you hold")
+            .catch((error) => {console.log(error);});;
+          return
+        }
+
+        let msg = await message.author.send('Generating QR Code...')
+          .catch((error) => {console.log(error);});;
         const qrCode = await generateLogin(message, bot);
         
         let base64Image = qrCode.split(';base64,').pop();
         
         fs.writeFile('./qrcodes/login_.jpg', base64Image, {encoding: 'base64'}, (err) => {
             console.log('File created');
-            message.author.send("Scan with Xact Wallet.", { files: ["./qrcodes/login_.jpg"] });
+            message.author.send("Scan with Xact Wallet.", { files: ["./qrcodes/login_.jpg"] })
+              .catch((error) => {console.log(error);});;
         });
         break;
 

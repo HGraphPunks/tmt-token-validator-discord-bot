@@ -1,6 +1,8 @@
 module.exports = {
   coinEyesPunk: false,
   glitchPunk: false,
+  glitchPunkGif: false,
   lazySuperPunk: false,
-  classicPunk: false
+  lazySuperDogPunk: false,
+  classicPunk: false,
 }

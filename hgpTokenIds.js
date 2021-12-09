@@ -81,7 +81,7 @@ module.exports = {
     '0.0.590058',
     '0.0.590057',
   ],
-  lazySuperDog: [
+  lazySuperDogPunk: [
     '0.0.590083',
     '0.0.590081',
     '0.0.590079',
