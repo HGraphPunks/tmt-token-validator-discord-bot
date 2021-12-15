@@ -28,8 +28,9 @@ module.exports = async (message, bot) => {
   client.connect().subscribe(user => {
     // Check to see if user is a punk holder
     axios
-    .get('https://mainnet-public.mirrornode.hedera.com/api/v1/tokens?account.id=' + user.accountId)
+    .get('https://mainnet-public.mirrornode.hedera.com/api/v1/tokens?account.id=' + user.accountId+'&limit=500')
     .then((response) => {
+        console.log(response.data.tokens.length);
         const tokenIds = response.data.tokens.map(token => token.token_id)
         hgpHolder.coinEyesPunk = tokenIds.some(r => hgpTokenIds.coinEyesPunk.includes(r))
         hgpHolder.glitchPunk = tokenIds.some(r => hgpTokenIds.glitchPunk.includes(r))
@@ -56,7 +57,6 @@ module.exports = async (message, bot) => {
         var role5 = message.guild.roles.cache.find(role => role.id === "918273097050771457");
         hgpHolder.glitchPunkGif ? message.member.roles.add(role5).catch((error) => {console.log(error);}) : message.member.roles.remove(role5).catch((error) => {console.log(error);});
 
-
         let embed =  new MessageEmbed()
             .setTitle(`Holder Roles for: ${message.member ? message.member.displayName : message.author.username}`)
             .setColor('GREEN')
@@ -76,6 +76,8 @@ module.exports = async (message, bot) => {
         
         if (hgpHolder.glitchPunk || hgpHolder.coinEyesPunk || hgpHolder.lazySuperPunk || hgpHolder.classicPunk || hgpHolder.lazySuperDogPunk || hgpHolder.glitchPunkGif) {
           setUserWithRole(user, hgpHolder, message.id, message.channel.id, message.author)
+        } else {
+          console.log('use has no roles:', user)
         }
     })
     .catch((error) => {

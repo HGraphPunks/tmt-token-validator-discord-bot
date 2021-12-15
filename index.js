@@ -33,7 +33,7 @@ bot.on('message', async message => {
       case 'validate':
         // Only allow #bouncer bot channel
         if (message.channel.id !== '918265350276128768') {
-          message.author.send("Bzzzzz* Error: Please use #🤖┃bouncer-bot to post _validate the Punks you hold")
+          message.author.send("Bzzzzz* Error: Please use #🤖┃bouncer-bot to post _validate and earn holder roles for the Punks you own")
             .catch((error) => {console.log(error);});;
           return
         }
@@ -41,7 +41,6 @@ bot.on('message', async message => {
         let msg = await message.author.send('Generating QR Code...')
           .catch((error) => {console.log(error);});;
         const qrCode = await generateLogin(message, bot);
-        
         let base64Image = qrCode.split(';base64,').pop();
         
         fs.writeFile('./qrcodes/login_.jpg', base64Image, {encoding: 'base64'}, (err) => {

@@ -34,9 +34,10 @@ module.exports = cron.schedule('1 */12 * * *', function() {
   client.list("user_", { raw: false }).then((users) => {
     // Add in fetching user from discord API, not saving to DB
     users.forEach(async (userKeyFromDB) => {
+      console.log(userKeyFromDB)
+      const user = await client.get(userKeyFromDB).catch((error) => {console.log(error);});
       console.log(user)
-      const user = await client.get(userKeyFromDB);
-      const channel = cronBot.channels.cache.get(user.channelId).catch((error) => {console.log(error);});
+      const channel = cronBot.channels.cache.get(user.channelId);
       const message = await channel.messages.fetch(user.messageId).catch((error) => {console.log(error);});
       const member = await message.channel.guild.members.fetch(user.author.id).catch((error) => {console.log(error);});
 
