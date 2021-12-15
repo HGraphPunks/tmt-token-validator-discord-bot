@@ -1,4 +1,4 @@
 module.exports = {
   prefix: '_',
-  token: process.env.TOKEN
+  token: process.env['TOKEN']
 };
